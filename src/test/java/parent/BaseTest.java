@@ -6,7 +6,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-
 public class BaseTest {
     public WebDriver browser;
 
@@ -16,13 +15,10 @@ public class BaseTest {
         options.addArguments("start-maximized");
         options.addArguments("--guest");
         browser = new ChromeDriver(options);
-        browser.get("https://www.saucedemo.com/");
     }
 
     @AfterMethod
     public void close() {
        browser.quit();
     }
-
-
 }
