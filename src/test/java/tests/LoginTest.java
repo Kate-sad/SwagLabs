@@ -1,30 +1,41 @@
 package tests;
 
-import org.openqa.selenium.By;
 import org.testng.annotations.Test;
-import parent.BaseTest;
+import tests.parent.BaseTest;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class LoginTest extends BaseTest {
-    @Test
-    public void checkLogin() {
-        browser.get("https://www.saucedemo.com/");
-        browser.findElement(By.xpath("//input[@placeholder='Username']")).sendKeys("standard_user");
-        browser.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys("secret_sauce");
-        browser.findElement(By.cssSelector("*[value='Login']")).click();
-        boolean isPresent = browser.findElement(By.xpath("//*[@class='title']")).isDisplayed();
-        assertTrue(isPresent);
+
+    @Test(description = "проверка корректной авторизации")
+    public void checkCorrectLogin() {
+        loginPage.open();
+        loginPage.loginThruZip("standard_user", "secret_sauce");
+        assertTrue(productsPage.isTitlePresent());
+        assertEquals(productsPage.getTitle(), "Products");
+        productsPage.addToCart("Sauce Labs Bike Light");
+        loginPage.openPath("inventory.html");
     }
 
-    @Test
-    public void checkErrorLogin() {
-        browser.get("https://www.saucedemo.com/");
-        browser.findElement(By.xpath("//input[@placeholder='Username']")).sendKeys("locked_out_user");
-        browser.findElement(By.xpath("//input[@placeholder='Password']")).sendKeys("secret_sauce");
-        browser.findElement(By.cssSelector("*[value='Login']")).click();
-        String errorMsg = browser.findElement(By.xpath("//*[@data-test='error']")).getText();
-        assertEquals(errorMsg, "Epic sadface: Sorry, this user has been locked out.");
+    @Test(description = "проверка входа с неверным логином")
+    public void checkLockedUserLogin() {
+        loginPage.open();
+        loginPage.loginThruZip("locked_out_user", "secret_sauce");
+        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Sorry, this user has been locked out.");
+    }
+
+    @Test(description = "проверка входа с пустым логином")
+    public void checkNoUserLogin() {
+        loginPage.open();
+        loginPage.loginThruZip("", "secret_sauce");
+        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Username is required");
+    }
+
+    @Test(description = "проверка входа с пустым паролем")
+    public void checkNoUserPassword() {
+        loginPage.open();
+        loginPage.loginThruZip("standard_user", "");
+        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Password is required");
     }
 }
