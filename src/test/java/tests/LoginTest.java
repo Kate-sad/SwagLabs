@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import tests.parent.BaseTest;
 
@@ -15,24 +16,19 @@ public class LoginTest extends BaseTest {
         assertTrue(productsPage.isTitlePresent());
     }
 
-    @Test(description = "проверка входа с неверным логином")
-    public void checkLockedUserLogin() {
-        loginPage.open();
-        loginPage.loginThruZip("locked_out_user", "secret_sauce");
-        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Sorry, this user has been locked out.");
+    @DataProvider()
+    public Object[][] loginData() {
+        return new Object[][] {
+                {"locked_out_user", "secret_sauce", "Epic sadface: Sorry, this user has been locked out."},
+                {"", "secret_sauce", "Epic sadface: Username is required"},
+                {"standard_user", "", "Epic sadface: Password is required"}
+        };
     }
 
-    @Test(description = "проверка входа с пустым логином")
-    public void checkNoUserLogin() {
+    @Test(description = "проверка входа с неверными данными", dataProvider = "loginData")
+    public void checkIncorrectLogin(String user, String password, String errorMsg) {
         loginPage.open();
-        loginPage.loginThruZip("", "secret_sauce");
-        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Username is required");
-    }
-
-    @Test(description = "проверка входа с пустым паролем")
-    public void checkNoUserPassword() {
-        loginPage.open();
-        loginPage.loginThruZip("standard_user", "");
-        assertEquals(loginPage.checkErrorMsg(), "Epic sadface: Password is required");
+        loginPage.loginThruZip(user, password);
+        assertEquals(loginPage.checkErrorMsg(), errorMsg);
     }
 }
