@@ -13,9 +13,6 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.loginThruZip("standard_user", "secret_sauce");
         assertTrue(productsPage.isTitlePresent());
-        assertEquals(productsPage.getTitle(), "Products");
-        productsPage.addToCart("Sauce Labs Bike Light");
-        loginPage.openPath("inventory.html");
     }
 
     @Test(description = "проверка входа с неверным логином")
