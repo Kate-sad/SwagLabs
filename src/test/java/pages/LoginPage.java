@@ -18,14 +18,26 @@ public class LoginPage extends BasePage {
         driver.get(BASE_URL);
     }
 
-    public void openPath(String path) {
-        driver.get(BASE_URL + path);
+    public void open(String url) {
+        driver.get(BASE_URL + url);
     }
 
     public void loginThruZip(String login, String password) {
-         driver.findElement(LOGIN_INPUT).sendKeys(login);
-         driver.findElement(PASSWORD_INPUT).sendKeys(password);
-         driver.findElement(LOGIN_BTN).click();
+        fillLoginField(login);
+        fillPasswordField(password);
+        clickSubmit();
+    }
+
+    public void fillLoginField(String login) {
+        driver.findElement(LOGIN_INPUT).sendKeys(login);
+    }
+
+    public void fillPasswordField(String password) {
+        driver.findElement(PASSWORD_INPUT).sendKeys(password);
+    }
+
+    public void clickSubmit() {
+        driver.findElement(LOGIN_BTN).click();
     }
 
     public String checkErrorMsg() {
