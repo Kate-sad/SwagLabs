@@ -24,11 +24,15 @@ public class ProductsPage extends BasePage {
     }
 
     public void addToCart(String goodsName) {
-        By addToCart = By.xpath(String.format(ADD_TO_CART_BUTTON_PATTERN, goodsName));
+        By addToCart = By.xpath(String.format(ADD_TO_CART_BUTTON_PATTERN.formatted(goodsName)));
         driver.findElement(addToCart).click();
     }
 
     public void addToCart(int goodsIndex) {
         driver.findElements(ADD_TO_CART_BUTTON).get(goodsIndex).click();
+    }
+
+    public void openCart() {
+        driver.findElement(By.xpath("//*[@data-test='shopping-cart-link']")).click();
     }
 }
