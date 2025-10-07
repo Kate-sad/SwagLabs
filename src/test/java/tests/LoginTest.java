@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import tests.parent.BaseTest;
 import user.User;
 
+import static enums.DepartmentNaming.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static user.UserFactory.*;
@@ -29,7 +30,7 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.loginThruZip(withAdminPermission());
         assertTrue(productsPage.isTitlePresent());
-        assertEquals(productsPage.getTitle(), "Productss", "Название товара");
+        assertEquals(productsPage.getTitle(), PRODUCTS.getDisplayName(), "Название товара");
     }
 
     @DataProvider()
